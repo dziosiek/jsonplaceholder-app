@@ -16,7 +16,6 @@ public class FetchPostsService {
 
     private static final Logger logger = LogManager.getLogger();
     private static final String API_URL = "https://jsonplaceholder.typicode.com";
-    private static final String RESOURCES_PATH_POSTS = "src/main/resources/data/posts";
     private final DataToJsonFileWritter dataToJsonFileWritter;
 
     public void fetchData() {
@@ -24,11 +23,11 @@ public class FetchPostsService {
         logger.info("Start fetching data..");
 
         WebClient client = WebClient.create(API_URL + "/posts");
-        Post[] stringMono = client.get().retrieve().bodyToMono(Post[].class)
+        Post[] posts = client.get().retrieve().bodyToMono(Post[].class)
             .block();
 
-        Arrays.asList(stringMono).forEach(dataToJsonFileWritter::writePostToFile);
+        Arrays.asList(posts).forEach(dataToJsonFileWritter::writePostToFile);
 
-        logger.info("Data fetching done");
+        logger.info("Data fetching done. Saved " + posts.length + " files");
     }
 }
